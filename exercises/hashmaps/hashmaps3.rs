@@ -14,11 +14,11 @@
 // Execute `rustlings hint hashmaps3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 use std::collections::HashMap;
 
 // A structure to store the goal details of a team.
+// #[derive(Debug)]
 struct Team {
     goals_scored: u8,
     goals_conceded: u8,
@@ -39,6 +39,31 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         // will be the number of goals conceded from team_2, and similarly
         // goals scored by team_2 will be the number of goals conceded by
         // team_1.
+        // for team1
+        let mut team1 = Team{
+            goals_scored:team_1_score,
+            goals_conceded:team_2_score
+        }; 
+        if scores.contains_key(&team_1_name) {
+            let old_team1 = scores.get(&team_1_name).unwrap();
+            team1.goals_scored += old_team1.goals_scored;
+            team1.goals_conceded += old_team1.goals_conceded;
+            scores.insert(team_1_name,team1);
+        }else {
+            scores.insert(team_1_name,team1);
+        }
+        let mut team2 = Team{
+            goals_scored:team_2_score,
+            goals_conceded:team_1_score
+        };
+        if scores.contains_key(&team_2_name) {
+            let old_team2 = scores.get(&team_2_name).unwrap();
+            team2.goals_scored += old_team2.goals_scored;
+            team2.goals_conceded += old_team2.goals_conceded;
+            scores.insert(team_2_name,team2);
+        }else {
+            scores.insert(team_2_name,team2);
+        }
     }
     scores
 }
@@ -79,6 +104,7 @@ mod tests {
     #[test]
     fn validate_team_score_2() {
         let scores = build_scores_table(get_results());
+        // println!("{:?}",scores);
         let team = scores.get("Spain").unwrap();
         assert_eq!(team.goals_scored, 0);
         assert_eq!(team.goals_conceded, 2);
